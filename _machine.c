@@ -1,7 +1,7 @@
 #include "library.h"
 
 int idx, length;
-char cw[256];
+char cw[128];
 
 void START (char str[]) {
     idx = 0;
