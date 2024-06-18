@@ -16,7 +16,7 @@ int strequal (char str[], char check[]) {
     else return 0;
 }
 
-void maxstr(table* tbl, int n, mainFile main[], int m) {
+void maxstr(table tbl[], int n, mainFile main[], int m) {
     for (int i = 0; i < n; i++) {
         int max_length = strlen(tbl[i].name);
         for (int j = 0; j < m; j++) {
@@ -24,7 +24,7 @@ void maxstr(table* tbl, int n, mainFile main[], int m) {
                 if (strlen(main[j].ID) > max_length) {
                     max_length = strlen(main[j].ID);
                 }
-            } else if (strequal(tbl[i].name, "Deskripsi Ide")) {
+            } else if (strequal(tbl[i].name, "Deskripsi_Ide")) {
                 if (strlen(main[j].name) > max_length) {
                     max_length = strlen(main[j].name);
                 }
@@ -38,7 +38,7 @@ void maxstr(table* tbl, int n, mainFile main[], int m) {
     }
 }
 
-void maxstr_sub(table* tbl, int n, subFile sub[], int s) {
+void maxstr_sub(table tbl[], int n, subFile sub[], int s) {
     for (int i = 0; i < n; i++) {
         int max_length = strlen(tbl[i].name);
         for (int j = 0; j < s; j++) {
@@ -46,7 +46,7 @@ void maxstr_sub(table* tbl, int n, subFile sub[], int s) {
                 if (strlen(sub[j].ID) > max_length) {
                     max_length = strlen(sub[j].ID);
                 }
-            } else if (strequal(tbl[i].name, "Nama Kategori")) {
+            } else if (strequal(tbl[i].name, "Nama_Kategori")) {
                 if (strlen(sub[j].name) > max_length) {
                     max_length = strlen(sub[j].name);
                 }
@@ -55,7 +55,6 @@ void maxstr_sub(table* tbl, int n, subFile sub[], int s) {
         tbl[i].length = max_length;
     }
 }
-
 
 void concat (char str1[], char str2[]) {
     int L1 = strlen (str1), L2 = strlen (str2);
