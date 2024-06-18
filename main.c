@@ -6,8 +6,6 @@ saya tidak melakukan kecurangan seperti yang telah dispesifikasikan. Aamiin.*/
 
 int main () {
     // welcome();
-
-    table ide[3], kategori[2];
     
     // Mengisi elemen-elemen struct ide
     strcpy(ide[0].name, "ID");
@@ -19,15 +17,14 @@ int main () {
     strcpy(kategori[1].name, "Nama_Kategori");
     
     // Mengambil data dari sequential files
-    _mainRead(&m, main, "seqfiles/ide.txt");
-    _subRead(&s, sub, "seqfiles/kategori.txt");
+    _mainRead(&m, _main, "seqfiles/ide.txt");
+    _subRead(&s, _sub, "seqfiles/kategori.txt");
     
-    char input[256];
     do {
-        printf ("\nDBMS Daneswara> "); RESET(input);
-        scanf("%255[^\n]s", input); getchar();
+        printf ("\nDBMS Daneswara> "); RESET(str);
+        scanf("%255[^\n]s", str); getchar();
 
-        checkInput(input);
+        checkInput(str);
     } while (1);
     
     return 0;
