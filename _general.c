@@ -16,6 +16,42 @@ int strequal (char str[], char check[]) {
     else return 0;
 }
 
+int maxstr(char column_name[],int maxstr(char column_name[], mainFile main[], int m) {
+    int max_length = strlen(column_name);
+    for (int i = 0; i < m; i++) {
+        if (strequal(column_name, "ID")) {
+            if (strlen(main[i].ID) > max_length) {
+                max_length = strlen(main[i].ID);
+            }
+        } else if (strequal(column_name, "Deskripsi Ide")) {
+            if (strlen(main[i].name) > max_length) {
+                max_length = strlen(main[i].name);
+            }
+        } else if (strequal(column_name, "Kategori")) {
+            if (strlen(main[i].subID) > max_length) {
+                max_length = strlen(main[i].subID);
+            }
+        }
+    }
+    return max_length;
+}
+
+int maxstr_sub(char column_name[], subFile sub[], int s) {
+    int max_length = strlen(column_name);
+    for (int i = 0; i < s; i++) {
+        if (strequal(column_name, "ID")) {
+            if (strlen(sub[i].ID) > max_length) {
+                max_length = strlen(sub[i].ID);
+            }
+        } else if (strequal(column_name, "Nama Kategori")) {
+            if (strlen(sub[i].name) > max_length) {
+                max_length = strlen(sub[i].name);
+            }
+        }
+    }
+    return max_length;
+}
+
 void concat (char str1[], char str2[]) {
     int L1 = strlen (str1), L2 = strlen (str2);
     for (int i = 0; i < L2; i++) {
