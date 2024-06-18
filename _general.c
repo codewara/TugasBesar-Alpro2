@@ -16,41 +16,46 @@ int strequal (char str[], char check[]) {
     else return 0;
 }
 
-int maxstr(char column_name[],int maxstr(char column_name[], mainFile main[], int m) {
-    int max_length = strlen(column_name);
-    for (int i = 0; i < m; i++) {
-        if (strequal(column_name, "ID")) {
-            if (strlen(main[i].ID) > max_length) {
-                max_length = strlen(main[i].ID);
-            }
-        } else if (strequal(column_name, "Deskripsi Ide")) {
-            if (strlen(main[i].name) > max_length) {
-                max_length = strlen(main[i].name);
-            }
-        } else if (strequal(column_name, "Kategori")) {
-            if (strlen(main[i].subID) > max_length) {
-                max_length = strlen(main[i].subID);
+void maxstr(table* tbl, int n, mainFile main[], int m) {
+    for (int i = 0; i < n; i++) {
+        int max_length = strlen(tbl[i].name);
+        for (int j = 0; j < m; j++) {
+            if (strequal(tbl[i].name, "ID")) {
+                if (strlen(main[j].ID) > max_length) {
+                    max_length = strlen(main[j].ID);
+                }
+            } else if (strequal(tbl[i].name, "Deskripsi Ide")) {
+                if (strlen(main[j].name) > max_length) {
+                    max_length = strlen(main[j].name);
+                }
+            } else if (strequal(tbl[i].name, "Kategori")) {
+                if (strlen(main[j].subID) > max_length) {
+                    max_length = strlen(main[j].subID);
+                }
             }
         }
+        tbl[i].length = max_length;
     }
-    return max_length;
 }
 
-int maxstr_sub(char column_name[], subFile sub[], int s) {
-    int max_length = strlen(column_name);
-    for (int i = 0; i < s; i++) {
-        if (strequal(column_name, "ID")) {
-            if (strlen(sub[i].ID) > max_length) {
-                max_length = strlen(sub[i].ID);
-            }
-        } else if (strequal(column_name, "Nama Kategori")) {
-            if (strlen(sub[i].name) > max_length) {
-                max_length = strlen(sub[i].name);
+void maxstr_sub(table* tbl, int n, subFile sub[], int s) {
+    for (int i = 0; i < n; i++) {
+        int max_length = strlen(tbl[i].name);
+        for (int j = 0; j < s; j++) {
+            if (strequal(tbl[i].name, "ID")) {
+                if (strlen(sub[j].ID) > max_length) {
+                    max_length = strlen(sub[j].ID);
+                }
+            } else if (strequal(tbl[i].name, "Nama Kategori")) {
+                if (strlen(sub[j].name) > max_length) {
+                    max_length = strlen(sub[j].name);
+                }
             }
         }
+        tbl[i].length = max_length;
     }
-    return max_length;
 }
+
 
 void concat (char str1[], char str2[]) {
     int L1 = strlen (str1), L2 = strlen (str2);
