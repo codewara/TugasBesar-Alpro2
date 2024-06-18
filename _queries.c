@@ -1,13 +1,12 @@
 #include "library.h"
 
-int err;
 char str[256], tablename[128], columnname[128];
 table ide[3], kategori[2];
 mainFile _main[256];
 subFile _sub[256];
 
 void checkInput (char str[]) {
-    START (str); err = 101;
+    START (str);
     if (strequal (READ (), "jangan")) quit(str);
     else if (strequal (READ (), "SHOW")) {
         INC(str); SHOW (READ ());
@@ -15,9 +14,9 @@ void checkInput (char str[]) {
         INC(str); INSERT (READ ());
     } else if (strequal (READ (), "UPDATE")) {
         INC(str); UPDATE (READ ());
-    } //else if (strequal (READ (), "DELETE")) {
-    //     INC(str); DELETE (READ ());
-    // } else if (strequal (READ (), "JOIN")) {
+    } else if (strequal (READ (), "DELETE")) {
+        INC(str); DELETE (READ ());
+    }// else if (strequal (READ (), "JOIN")) {
     //     INC(str); JOIN (READ ());
     // } 
     else { ALERT(101); return; }
@@ -80,6 +79,7 @@ void getTable(char* table) {
         printf("+");
         for (int i = 0; i < subid_width + 2; i++) printf("-");
         printf("+\n");
+
     } else if (strequal(table, "kategori")) {
         maxstr_sub(kategori, 2, _sub, s);
 
@@ -117,6 +117,57 @@ void getTable(char* table) {
         printf("+");
         for (int i = 0; i < name_width + 2; i++) printf("-");
         printf("+\n");
+
+    } else if (strequal (table, "IJOIN")) {
+        maxstr(ide, 3, _main, m);
+        maxstr_sub(kategori, 2, _sub, s);
+
+        int Mid_width = ide[0].length;
+        int Mname_width = ide[1].length;
+        int Sname_width = kategori[1].length;
+
+        // Header
+        printf("+");
+        for (int i = 0; i < Mid_width + 2; i++) printf("-");
+        printf("+");
+        for (int i = 0; i < Mname_width + 2; i++) printf("-");
+        printf("+");
+        for (int i = 0; i < Sname_width + 2; i++) printf("-");
+        printf("+\n");
+        
+        printf("| ID ");
+        for (int i = 0; i < Mid_width - 2; i++) printf(" ");
+        printf("| Deskripsi_Ide ");
+        for (int i = 0; i < Mname_width - 13; i++) printf(" ");
+        printf("| Nama_Kategori ");
+        for (int i = 0; i < Sname_width - 13; i++) printf(" ");
+        printf("|\n");
+
+        // Separator
+        printf("|");
+        for (int i = 0; i < Mid_width + 2; i++) printf("-");
+        printf("+");
+        for (int i = 0; i < Mname_width + 2; i++) printf("-");
+        printf("+");
+        for (int i = 0; i < Sname_width + 2; i++) printf("-");
+        printf("|\n");
+
+        // Data
+        for (int i = 0; i < m; i++) {
+            printf("| %-*s | %-*s | %-*s |\n", Mid_width, _main[i].ID,
+                                               Mname_width, _main[i].name,
+                                               Sname_width, _sub[_getID (_main[i].subID)].name);
+        }
+
+        // Footer
+        printf("+");
+        for (int i = 0; i < Mid_width + 2; i++) printf("-");
+        printf("+");
+        for (int i = 0; i < Mname_width + 2; i++) printf("-");
+        printf("+");
+        for (int i = 0; i < Sname_width + 2; i++) printf("-");
+        printf("+\n");
+
     }
 }
 
@@ -152,6 +203,10 @@ void ALERT (int code) {
             concat (errmsg, tablename);
             concat (errmsg, "' tidak ditemukan.");
             break;
+            
+        case 106:
+            strcpy (errmsg, "ERROR 106 : Jenis join tidak ditemukan.");
+            break;
     }
     printf ("%s\n", errmsg);
     return;
@@ -159,9 +214,9 @@ void ALERT (int code) {
 
 void SHOW (char table[]) {
     strcpy (tablename, table);
-    if (strequal(table, "ide") || strequal(table, "kategori")) {
-        printf ("\nTabel %s\n", table);
-        getTable(table);
+    if (strequal(tablename, "ide") || strequal(tablename, "kategori")) {
+        printf ("\nTabel %s\n", tablename);
+        getTable(tablename);
     } else { ALERT (104); return; }
 }
 
@@ -174,11 +229,35 @@ void INSERT (char table[]) {
     } else { ALERT (104); return; }
 }
 
-void UPDATE(char str[]) {
+void UPDATE (char table[]) {
     strcpy(tablename, READ());
     if (strequal(tablename, "ide")) {
         updateMain (str);
     } else if (strequal(tablename, "kategori")) {
         updateSub (str);
     } else { ALERT(104); return; }
+}
+
+void DELETE (char table[]) {
+    char id[16];
+    strcpy(tablename, READ());
+    
+    INC (str);
+    strcpy (id, READ ());
+
+    if (strequal(tablename, "ide")) {
+        delMain (id);
+    } else if (strequal(tablename, "kategori")) {
+        delSub (id);
+    } else { ALERT(104); return; }
+}
+
+void JOIN (char type[]) {
+    if (strequal (type, "INNER")) {
+        getTable ("IJOIN");
+    } else if (strequal (type, "RIGHT")) {
+        getTable ("RJOIN");
+    } else if (strequal (type, "LEFT")) {
+        getTable ("LJOIN");
+    }
 }

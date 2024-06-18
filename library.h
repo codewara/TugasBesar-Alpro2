@@ -57,17 +57,16 @@ void still (char*);
 void SHOW (char*);
 void INSERT (char*);
 void UPDATE (char*);
+void DELETE (char*);
 
 /*=========== SEQUENTIAL FILE ===========*/
 
-void _mainCreate (int, mainFile*, char*);
-void _subCreate (int, subFile*, char*);
 void _mainRead (int*, mainFile*, char*);
 void _subRead (int*, subFile*, char*);
-void _mainDelete (int, char*, mainFile*);
-void _subDelete (int, char*, subFile*);
+void _mainCreate (int, mainFile*, char*);
+void _subCreate (int, subFile*, char*);
 int _getID (char*, subFile*);
-int _cekFK (char*);
+int _isTaken (char*, char*);
 
 void addMain (char*);
 void addSub (char*);
