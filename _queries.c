@@ -1,7 +1,10 @@
 #include "library.h"
 
 int err;
-char tablename[128], columnname[128];
+char str[256], tablename[128], columnname[128];
+table ide[3], kategori[2];
+mainFile _main[256];
+subFile _sub[256];
 
 void checkInput (char str[]) {
     START (str); err = 101;
@@ -31,10 +34,8 @@ void still (char str[]) {
 }
 
 void getTable(char* table) {
-    if (!EOP (str)) { ALERT (103); return; }
-    
     if (strequal(table, "ide")) {
-        maxstr(ide, 3, main, m);
+        maxstr(ide, 3, _main, m);
 
         int id_width = ide[0].length;
         int name_width = ide[1].length;
@@ -42,79 +43,79 @@ void getTable(char* table) {
 
         // Header
         printf("+");
-        for (int i = 0; i < id_width; i++) printf("-");
+        for (int i = 0; i < id_width + 2; i++) printf("-");
         printf("+");
-        for (int i = 0; i < name_width; i++) printf("-");
+        for (int i = 0; i < name_width + 2; i++) printf("-");
         printf("+");
-        for (int i = 0; i < subid_width; i++) printf("-");
+        for (int i = 0; i < subid_width + 2; i++) printf("-");
         printf("+\n");
         
-        printf("| ID");
+        printf("| ID ");
         for (int i = 0; i < id_width - 2; i++) printf(" ");
-        printf("| Deskripsi_Ide");
-        for (int i = 0; i < name_width - 14; i++) printf(" ");
-        printf("| Kategori");
+        printf("| Deskripsi_Ide ");
+        for (int i = 0; i < name_width - 13; i++) printf(" ");
+        printf("| Kategori ");
         for (int i = 0; i < subid_width - 8; i++) printf(" ");
         printf("|\n");
 
         // Separator
+        printf("|");
+        for (int i = 0; i < id_width + 2; i++) printf("-");
         printf("+");
-        for (int i = 0; i < id_width; i++) printf("-");
+        for (int i = 0; i < name_width + 2; i++) printf("-");
         printf("+");
-        for (int i = 0; i < name_width; i++) printf("-");
-        printf("+");
-        for (int i = 0; i < subid_width; i++) printf("-");
-        printf("+\n");
+        for (int i = 0; i < subid_width + 2; i++) printf("-");
+        printf("|\n");
 
         // Data
         for (int i = 0; i < m; i++) {
-            printf("| %-*s | %-*s | %-*s |\n", id_width, main[i].ID, name_width, main[i].name, subid_width, main[i].subID);
+            printf("| %-*s | %-*s | %-*s |\n", id_width, _main[i].ID, name_width, _main[i].name, subid_width, _main[i].subID);
         }
 
         // Footer
         printf("+");
-        for (int i = 0; i < id_width; i++) printf("-");
+        for (int i = 0; i < id_width + 2; i++) printf("-");
         printf("+");
-        for (int i = 0; i < name_width; i++) printf("-");
+        for (int i = 0; i < name_width + 2; i++) printf("-");
         printf("+");
-        for (int i = 0; i < subid_width; i++) printf("-");
+        for (int i = 0; i < subid_width + 2; i++) printf("-");
         printf("+\n");
     } else if (strequal(table, "kategori")) {
-        maxstr_sub(kategori, 2, sub, s);
+        maxstr_sub(kategori, 2, _sub, s);
 
         int id_width = kategori[0].length;
         int name_width = kategori[1].length;
 
         // Header
         printf("+");
-        for (int i = 0; i < id_width; i++) printf("-");
+        for (int i = 0; i < id_width + 2; i++) printf("-");
         printf("+");
-        for (int i = 0; i < name_width; i++) printf("-");
+        for (int i = 0; i < name_width + 2; i++) printf("-");
         printf("+\n");
         
-        printf("| ID");
+        printf("| ID ");
         for (int i = 0; i < id_width - 2; i++) printf(" ");
-        printf("| Nama_Kategori");
-        for (int i = 0; i < name_width - 14; i++) printf(" ");
+        printf("| Nama_Kategori ");
+        for (int i = 0; i < name_width - 13; i++) printf(" ");
         printf("|\n");
 
         // Separator
         printf("+");
-        for (int i = 0; i < id_width; i++) printf("-");
+        for (int i = 0; i < id_width + 2; i++) printf("-");
         printf("+");
-        for (int i = 0; i < name_width; i++) printf("-");
+        for (int i = 0; i < name_width + 2; i++) printf("-");
         printf("+\n");
 
         // Data
         for (int i = 0; i < s; i++) {
-            printf("| %-*s | %-*s |\n", id_width, sub[i].ID, name_width, sub[i].name);
+            printf("| %-*s | %-*s |\n", id_width, _sub[i].ID, name_width, _sub[i].name);
         }
 
         // Footer
         printf("+");
-        for (int i = 0; i < id_width; i++) printf("-");
+        for (int i = 0; i < id_width + 2; i++) printf("-");
         printf("+");
-        for (int i = 0; i < name_width; i++) printf("-");
+        for (int i = 0; i < name_width + 2; i++) printf("-");
         printf("+\n");
     }
 }
@@ -150,7 +151,7 @@ void ALERT (int code) {
             concat (errmsg, "' pada tabel '");
             concat (errmsg, tablename);
             concat (errmsg, "' tidak ditemukan.");
-            
+            break;
     }
     printf ("%s\n", errmsg);
     return;
@@ -165,6 +166,7 @@ void SHOW (char table[]) {
 }
 
 void INSERT (char table[]) {
+    strcpy (tablename, table);
     if (strequal(tablename, "ide")) {
         addMain (str);
     } else if (strequal(tablename, "kategori")) {
