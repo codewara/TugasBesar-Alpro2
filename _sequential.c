@@ -1,8 +1,6 @@
 #include "library.h"
 
 int m = 0, s = 0;
-mainFile main[256];
-subFile sub[256];
 
 void _mainCreate (int n, mainFile src[], char dest[]) {
     FILE *file = fopen(dest, "w");
@@ -27,14 +25,14 @@ void _subCreate (int n, subFile src[], char dest[]) {
 void _mainRead (int *n, mainFile src[], char dest[]) {
     FILE *file = fopen(dest, "r");
 
-    fscanf(file, "%s %s %s %s %s %d",
+    fscanf(file, "%s %s %s",
            src[*n].ID, src[*n].name, src[*n].subID);
 
     if (strcmp (src[*n].ID, "####") == 0) {
         printf ("File ini kosong!\n");
     } else while (strcmp (src[*n].ID, "####") != 0) {
         (*n)++;
-        fscanf(file, "%s %s %s %s %s %d",
+        fscanf(file, "%s %s %s",
                src[*n].ID, src[*n].name, src[*n].subID);
     }
     fclose(file);
@@ -84,9 +82,9 @@ void _subDelete (int n, char ID[], subFile src[]) {
         if (strcmp (src[i].ID, ID) != 0) {
             fprintf(file, "%s %s\n", src[i].ID, src[i].name);
         } else {
-            if (cekFK (ID)) {
+            if (_cekFK (ID)) {
                 fprintf(file, "%s %s\n", src[i].ID, src[i].name);
-                else found = 2;
+                found = 2;
             } else found = 1;
         }
     } fprintf(file, "#### ####");
@@ -99,8 +97,8 @@ void _subDelete (int n, char ID[], subFile src[]) {
         n--;
     }
     
-    s1 = 0;
-    _subRead (&s, src, "seqfiles/kategori.txt"); break;
+    s = 0;
+    _subRead (&s, src, "seqfiles/kategori.txt");
     fclose(file);
 }
 
@@ -111,9 +109,9 @@ int _getID (char ID[], subFile src[]) {
 }
 
 int _cekFK (char ID[]) {
-    int i = 0
-    while (strcmp (ID, main[i].subID) != 0  && i < m) i++
-    (i < m) ? return 1 : return 0;
+    int i = 0;
+    while (strcmp (ID, _main[i].subID) != 0  && i < m) i++;
+    return (i < m) ? 1 : 0;
 }
 
 void addMain (char str[]) {
@@ -122,7 +120,7 @@ void addMain (char str[]) {
     // Masukkan data ID
     INC (str);
     if (EOP (str)) { ALERT (102); return; }
-    strcpy (newRecord.id, READ ());;
+    strcpy (newRecord.ID, READ ());;
 
     // Masukkan data Deskripsi Ide
     INC (str);
@@ -135,11 +133,11 @@ void addMain (char str[]) {
     strcpy (newRecord.subID, READ ());
 
     // Simpan data ke array
-    main[m] = newRecord;
+    _main[m] = newRecord;
     m++;
 
     // Perbarui data ke file
-    _mainCreate (m, main, "seqfiles/ide.txt");
+    _mainCreate (m, _main, "seqfiles/ide.txt");
 
     printf ("Data ide berhasil ditambahkan!\n");
 }
@@ -158,11 +156,11 @@ void addSub (char str[]) {
     strcpy (newRecord.name, READ ());
 
     // Simpan data ke array
-    sub[s] = newRecord;
+    _sub[s] = newRecord;
     s++;
 
     // Perbarui data ke file
-    _subCreate (s, sub, "seqfiles/kategori.txt");
+    _subCreate (s, _sub, "seqfiles/kategori.txt");
 
     printf ("Data kategori berhasil ditambahkan!\n");
 }
@@ -191,18 +189,18 @@ void updateMain (char str[]) {
     // Cari record dengan ID yang sesuai dan update
     int found = 0;
     for (int i = 0; i < m; i++) {
-        if (strcmp(main[i].ID, id) == 0) {
+        if (strcmp(_main[i].ID, id) == 0) {
             if (strequal(column, "Deskripsi_Ide")) {
-                strcpy(main[i].name, newValue);
+                strcpy(_main[i].name, newValue);
             } else if (strequal(column, "Kategori")) {
-                strcpy(main[i].subID, newValue);
+                strcpy(_main[i].subID, newValue);
             } else { ALERT (105); return; }
             found = 1; break;
         }
     }
 
     if (found) {
-        _mainCreate (m, main, "seqfiles/ide.txt");
+        _mainCreate (m, _main, "seqfiles/ide.txt");
         printf ("Data ide berhasil diperbarui!\n");
     } else {
         printf ("Data ide dengan ID %s tidak ditemukan!\n", id);
@@ -234,32 +232,18 @@ void updateSub (char str[]) {
     // Cari record dengan ID yang sesuai dan update
     int found = 0;
     for (int i = 0; i < m; i++) {
-        if (strcmp(main[i].ID, id) == 0) {
+        if (strcmp(_main[i].ID, id) == 0) {
             if (strequal(column, "Nama_Kategori")) {
-                strcpy(main[i].name, newValue);
+                strcpy(_main[i].name, newValue);
             } else { ALERT (105); return; }
             found = 1; break;
         }
     }
 
     if (found) {
-        _mainCreate (m, main, "seqfiles/kategori.txt");
+        _mainCreate (m, _main, "seqfiles/kategori.txt");
         printf ("Data ide berhasil diperbarui!\n");
     } else {
         printf ("Data ide dengan ID %s tidak ditemukan!\n", id);
     }
-}
-
-
-void delMain (int n, mainFile src[]) {
-    printf ("----------------------------------------\n");
-    printf ("ID          : "); scanf ("%s", ID);
-    _mainDelete (n, ID, src);
-    _storeData (m);
-}
-
-void delSub (int n, subFile src[]) {
-    printf ("----------------------------------------\n");
-    printf ("ID          : "); scanf ("%s", ID);
-    _subDelete (n, ID, src);
 }
