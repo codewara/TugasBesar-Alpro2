@@ -3,9 +3,6 @@
 #include <string.h>
 #include <time.h>
 
-extern int idx, length, err;
-extern char cw[128], tablename[128], columnname[128];
-
 /*=============== STRUCTS ===============*/
 
 typedef struct {
@@ -23,7 +20,16 @@ typedef struct {
 typedef struct {
     char ID[16];
     char name[128];
-} subFile
+} subFile;
+
+/*=============== EXTERNS ===============*/
+
+extern table ide[3], kategori[2];
+extern mainFile _main[256];
+extern subFile _sub[256];
+
+extern int m, s, idx, length, err;
+extern char str[256], cw[128], tablename[128], columnname[128];
 
 /*=============== GENERAL ===============*/
 
@@ -31,6 +37,8 @@ void concat (char*, char*);
 void delay (int);
 void welcome();
 void quit(char*);
+void maxstr (table*, int, mainFile*, int);
+void maxstr_sub (table*, int, subFile*, int);
 int strequal (char*, char*);
 
 /*=============== MACHINE ===============*/
@@ -47,6 +55,8 @@ void ALERT (int);
 void checkInput (char*);
 void still (char*);
 void SHOW (char*);
+void INSERT (char*);
+void UPDATE (char*);
 
 /*=========== SEQUENTIAL FILE ===========*/
 
@@ -65,6 +75,3 @@ void updateMain (char*);
 void updateSub (char*);
 void delMain (char*);
 void delSub (char*);
-
-
-
